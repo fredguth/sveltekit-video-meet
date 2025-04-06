@@ -1,8 +1,9 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { Server } from "socket.io";
-import type { PluginOption, UserConfig } from "vite";
+import { defineConfig } from 'vite';
 
-const socketioServer: PluginOption = {
+/** @type {import('vite').Plugin} */
+const socketioServer = {
   name: "socketioServer",
   configureServer(server) {
     if (server.httpServer) {
@@ -44,7 +45,7 @@ const socketioServer: PluginOption = {
   },
 };
 
-const config: UserConfig = {
+export default defineConfig({
   plugins: [sveltekit(), socketioServer],
   server: {
     port: 3000,
@@ -52,6 +53,4 @@ const config: UserConfig = {
   preview: {
     port: 3000,
   },
-};
-
-export default config;
+});

@@ -10,7 +10,6 @@ const app = express();
 const server = http.createServer(app);
 
 // Inject SocketIO
-
 const io = new Server(server);
 
 io.on("connection", (socket) => {
@@ -46,7 +45,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// SvelteKit handlers
+// SvelteKit handlers - pass only the handler function, not the entire app
 app.use(handler);
 
 server.listen(PORT, () => {
