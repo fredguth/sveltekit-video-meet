@@ -1,3 +1,3 @@
-export default function video(node: HTMLVideoElement, stream: MediaStream) {
+export default function video(node, stream) {
   node.srcObject = stream;
 }

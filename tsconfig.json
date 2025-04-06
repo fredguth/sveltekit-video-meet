@@ -12,5 +12,6 @@
 		"module": "ESNext",
 		"target": "ESNext",
 		"moduleResolution": "Node",
+		"verbatimModuleSyntax": true
 	}
 }

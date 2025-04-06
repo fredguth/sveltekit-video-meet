@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   const themes = [
     "cupcake",
     "bumblebee",
@@ -18,7 +18,7 @@
   ];
 
   let currentTheme = "corporate";
-  function handleChangeTheme(theme: string) {
+  function handleChangeTheme(theme) {
     currentTheme = theme;
     document.documentElement.setAttribute("data-theme", theme);
   }

@@ -1,5 +1,5 @@
-<script lang="ts">
-  let roomId: string;
+<script>
+  let roomId = '';
 </script>
 
 <div class:join={roomId} class="w-full sm:col-span-3">

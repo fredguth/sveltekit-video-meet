@@ -7,3 +7,10 @@ declare namespace App {
 	// interface Error {}
 	// interface Platform {}
 }
+
+// Declare Socket.IO types
+declare module 'socket.io-client' {
+  interface SocketOptions {
+    forceNode?: boolean;
+  }
+}

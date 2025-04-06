@@ -1,12 +1,12 @@
-<script lang="ts">
+<script>
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  let dialogRef: HTMLDialogElement | undefined;
-  export let users: string[] = [];
-  export let room: string;
-  function callUser(user: string) {
+  let dialogRef;
+  export let users = [];
+  export let room;
+  function callUser(user) {
     dispatch("calluser", {
       user,
     });

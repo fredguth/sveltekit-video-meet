@@ -1,24 +1,24 @@
-<script lang="ts">
+<script>
   import { onMount, onDestroy } from "svelte";
-  import { io, Socket } from "socket.io-client";
-  import Video from "$lib/components/video.svelte";
+  import { io } from "socket.io-client";
+  import Video from "$lib/components/Video.svelte";
   import { goto } from "$app/navigation";
   import IncommingCall from "$lib/components/incomming-call.svelte";
   import RemoteUsersModal from "$lib/components/remote-users-modal.svelte";
   import RoomInfo from "$lib/components/room-info.svelte";
 
-  export let data: { roomId: string };
+  export let data;
 
-  let users: string[] = [];
-  let peer: RTCPeerConnection;
-  let socket: Socket;
-  let remoteUser: string;
-  let currentUser: string;
-  let userStream: MediaStream;
-  let remoteStream: MediaStream;
+  let users = [];
+  let peer;
+  let socket;
+  let remoteUser = "";
+  let currentUser = "";
+  let userStream;
+  let remoteStream;
 
   let isIncommingCall = false;
-  let incommingPayload: any;
+  let incommingPayload;
 
   let isCallAccepted = false;
 
@@ -38,10 +38,14 @@
     userStream = stream;
   });
   onMount(() => {
-    socket = io();
+    socket = io({
+      forceNode: true
+    });
 
     socket.on("connect", () => {
-      currentUser = socket.id;
+      if (socket.id) {
+        currentUser = socket.id;
+      }
     });
     socket.emit("join-room", data.roomId);
 
@@ -66,11 +70,11 @@
     socket.on("ice-candidate", handleNewICECandidateMsg);
     socket.on("end-call", handleRemoteCallEnd);
   });
-  const handleCall = (userID: string) => {
+  const handleCall = (userID) => {
     callUser(userID);
     remoteUser = userID;
   };
-  function createPeer(userID: string) {
+  function createPeer(userID) {
     const peer = new RTCPeerConnection({
       iceServers: [
         {
@@ -90,11 +94,11 @@
 
     return peer;
   }
-  function callUser(userID: string) {
+  function callUser(userID) {
     peer = createPeer(userID);
     userStream.getTracks().forEach((track) => peer.addTrack(track, userStream));
   }
-  function handleNegotiationNeededEvent(userID: string) {
+  function handleNegotiationNeededEvent(userID) {
     peer
       .createOffer()
       .then((offer) => {
@@ -147,14 +151,14 @@
         isCallAccepted = true;
       });
   }
-  function handleAnswer(message: any) {
+  function handleAnswer(message) {
     console.log("incomming answer", message);
     remoteUser = message.caller;
     const desc = new RTCSessionDescription(message.sdp);
     peer.setRemoteDescription(desc).catch((e) => console.log(e));
     isCallAccepted = true;
   }
-  function handleICECandidateEvent(e: RTCPeerConnectionIceEvent) {
+  function handleICECandidateEvent(e) {
     if (e.candidate) {
       console.log("ice", e.candidate);
       const payload = {
@@ -164,13 +168,13 @@
       socket.emit("ice-candidate", payload);
     }
   }
-  function handleNewICECandidateMsg(incoming: any) {
+  function handleNewICECandidateMsg(incoming) {
     console.log("incomming ice", incoming);
     const candidate = new RTCIceCandidate(incoming);
 
     peer.addIceCandidate(candidate).catch((e) => console.log(e));
   }
-  function handleTrackEvent(e: RTCTrackEvent) {
+  function handleTrackEvent(e) {
     console.log("remote track", e.streams);
     remoteStream = e.streams[0];
   }
@@ -184,7 +188,7 @@
     remoteUser = "";
     goto("/");
   }
-  function handleRemoteCallEnd(data: any) {
+  function handleRemoteCallEnd(data) {
     stopMediaTracks();
     console.log(userStream.active);
     console.log(remoteStream.active);

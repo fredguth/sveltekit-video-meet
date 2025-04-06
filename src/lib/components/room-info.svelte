@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { page } from "$app/stores";
   let open = true;
   let link = $page.url.href;

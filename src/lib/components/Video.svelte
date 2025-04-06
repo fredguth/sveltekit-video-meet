@@ -1,9 +1,9 @@
-<script lang="ts">
+<script>
   import video from "$lib/directive/video";
 
-  export let stream: MediaStream;
-  export let user: string;
-  export let isCurrentUser: boolean = false;
+  export let stream;
+  export let user;
+  export let isCurrentUser = false;
 </script>
 
 {#if stream}

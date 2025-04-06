@@ -1,7 +1,7 @@
-<script lang="ts">
+<script>
   import { createEventDispatcher } from "svelte";
 
-  export let caller: string;
+  export let caller;
   const dispatch = createEventDispatcher();
   const receiveCall = () => {
     dispatch("receivecall");
